@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>groundedkit · Docbound</title>
+  <meta name="description" content="Docbound is a production-ready RAG starter for Spring Boot: cited answers, measured retrieval, and it runs locally with Ollama. Free and open source.">
+  <meta property="og:title" content="Docbound: a RAG starter for Spring Boot">
+  <meta property="og:description" content="Chat with your documents in Java. Cited answers, measured retrieval, runs locally with Ollama. Free and open source.">
+  <meta property="og:image" content="https://groundedkit.github.io/docbound-demo.gif">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <style>
+    :root {
+      --bg: #fafaf8;
+      --surface: #ffffff;
+      --surface-muted: #f1f1ee;
+      --border: #e3e3de;
+      --text: #1c1c1a;
+      --text-muted: #62625d;
+      --accent: #2f5bd3;
+      --accent-soft: #e8edfb;
+      --accent-text: #ffffff;
+      --code-bg: #16181d;
+      --code-text: #e6e6e3;
+      --radius: 12px;
+      --max: 1080px;
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #121211;
+        --surface: #1b1b1a;
+        --surface-muted: #232322;
+        --border: #30302d;
+        --text: #ececea;
+        --text-muted: #a3a39d;
+        --accent: #7d9ef2;
+        --accent-soft: #222d47;
+        --accent-text: #0e1320;
+        --code-bg: #0b0c0f;
+        color-scheme: dark;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
+    header.site {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-block: 18px;
+    }
+    .brand { font-weight: 700; font-size: 1.05rem; color: var(--text); text-decoration: none; letter-spacing: -0.01em; }
+    .brand span { color: var(--accent); }
+    nav a { color: var(--text-muted); text-decoration: none; margin-left: 20px; font-size: 0.95rem; }
+    nav a:hover { color: var(--text); }
+
+    .hero { padding-block: 56px 32px; text-align: center; }
+    .eyebrow {
+      display: inline-block; padding: 4px 12px; border-radius: 999px;
+      background: var(--accent-soft); color: var(--accent);
+      font-size: 0.85rem; font-weight: 600;
+    }
+    h1 { font-size: clamp(2rem, 5vw, 3.1rem); line-height: 1.12; letter-spacing: -0.025em; margin: 18px auto 14px; max-width: 18ch; }
+    .lead { font-size: 1.15rem; color: var(--text-muted); max-width: 40rem; margin: 0 auto 28px; }
+    .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .button {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 20px; border-radius: 10px; font-weight: 600; text-decoration: none;
+      border: 1px solid transparent;
+    }
+    .button.primary { background: var(--accent); color: var(--accent-text); }
+    .button.secondary { background: var(--surface); border-color: var(--border); color: var(--text); }
+    .button:hover { filter: brightness(1.05); }
+
+    .demo {
+      margin: 44px auto 0; max-width: 960px;
+      border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+      box-shadow: 0 18px 50px rgb(0 0 0 / 0.12); background: var(--surface);
+    }
+    .demo img { display: block; width: 100%; height: auto; }
+
+    section { padding-block: 64px; }
+    h2 { font-size: 1.7rem; letter-spacing: -0.015em; margin: 0 0 10px; }
+    .section-lead { color: var(--text-muted); margin: 0 0 32px; max-width: 42rem; }
+
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+    .card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 22px;
+    }
+    .card h3 { margin: 0 0 6px; font-size: 1.05rem; }
+    .card p { margin: 0; color: var(--text-muted); font-size: 0.97rem; }
+
+    .start { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 32px; align-items: start; }
+    .start ol { margin: 0; padding-left: 1.2rem; color: var(--text-muted); }
+    .start li { margin-bottom: 8px; }
+    .start li strong { color: var(--text); }
+    pre {
+      margin: 0; padding: 18px 20px; border-radius: var(--radius);
+      background: var(--code-bg); color: var(--code-text);
+      font: 0.92rem/1.7 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      overflow-x: auto;
+    }
+    pre .c { color: #8b8f99; }
+
+    .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .plan { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 26px; }
+    .plan.pro { border-color: var(--accent); }
+    .plan h3 { margin: 0; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
+    .plan .tag { font-size: 0.75rem; font-weight: 600; padding: 2px 9px; border-radius: 999px; background: var(--surface-muted); color: var(--text-muted); }
+    .plan.pro .tag { background: var(--accent-soft); color: var(--accent); }
+    .plan .price { color: var(--text-muted); margin: 6px 0 16px; }
+    .plan ul { list-style: none; padding: 0; margin: 0 0 22px; }
+    .plan li { padding: 6px 0 6px 26px; position: relative; }
+    .plan li::before { content: "✓"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+    .plan .button { width: 100%; justify-content: center; }
+    .fine { color: var(--text-muted); font-size: 0.88rem; margin: 10px 0 0; text-align: center; }
+
+    footer { border-top: 1px solid var(--border); padding-block: 28px 40px; color: var(--text-muted); font-size: 0.9rem; }
+    footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+    @media (max-width: 760px) {
+      .start { grid-template-columns: minmax(0, 1fr); }
+      section { padding-block: 44px; }
+      .hero { padding-block-start: 32px; }
+      nav a { margin-left: 14px; }
+      nav a.optional { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="wrap site">
+    <a class="brand" href="./">grounded<span>kit</span></a>
+    <nav>
+      <a class="optional" href="#features">Features</a>
+      <a class="optional" href="#start">Quick start</a>
+      <a href="#pricing">Free &amp; Pro</a>
+      <a href="https://github.com/groundedkit">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="wrap hero">
+      <span class="eyebrow">Docbound · free and open source</span>
+      <h1>Chat with your documents, in Spring Boot</h1>
+      <p class="lead">
+        Docbound is a production-ready RAG starter for Java. Answers stream in, cite the exact passages they came from,
+        and say "not found" instead of guessing. It runs on your machine with Ollama: no API keys, and your documents never leave it.
+      </p>
+      <div class="actions">
+        <a class="button primary" href="https://github.com/groundedkit/docbound">View on GitHub</a>
+        <a class="button secondary" href="#start">Quick start</a>
+      </div>
+      <div class="demo">
+        <img src="docbound-demo.gif" width="1040" height="640"
+             alt="Docbound demo: uploading a handbook, asking a question, opening the cited passage, and an off-topic question answered with 'not found'">
+      </div>
+    </div>
+
+    <section id="features">
+      <div class="wrap">
+        <h2>What you get</h2>
+        <p class="section-lead">A complete, tested application you can clone, run in minutes, and build your own product on.</p>
+        <div class="features">
+          <div class="card">
+            <h3>Cited, grounded answers</h3>
+            <p>Every claim links to the passage it came from. Questions your documents can't answer get "not found", not a made-up reply.</p>
+          </div>
+          <div class="card">
+            <h3>Runs fully locally</h3>
+            <p>Ollama runs the models on your own machine. No API keys, no per-token bills, and no documents sent to a third party.</p>
+          </div>
+          <div class="card">
+            <h3>Measured retrieval</h3>
+            <p>Structure-aware chunking, tuned with an included evaluation harness: the right passage ranks in the top 5 for all 55 questions in its test set.</p>
+          </div>
+          <div class="card">
+            <h3>A complete app</h3>
+            <p>Spring Boot 4.1 + Spring AI 2.0, a React UI, PostgreSQL + pgvector, tests and CI, all started with one Docker command.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="start">
+      <div class="wrap start">
+        <div>
+          <h2>Running in minutes</h2>
+          <p class="section-lead">Works on macOS, Windows and Linux. You need:</p>
+          <ol>
+            <li><strong>Docker</strong>: Docker Desktop, or Docker Engine on Linux</li>
+            <li><strong>Ollama</strong>, installed and running</li>
+            <li><strong>8 GB RAM</strong> and about 5 GB of free disk</li>
+          </ol>
+          <p class="section-lead" style="margin-top:16px">
+            Step-by-step instructions for each system are in the
+            <a href="https://github.com/groundedkit/docbound#quick-start">README</a>.
+          </p>
+        </div>
+        <pre><span class="c"># one-time: download the models (~2.3 GB)</span>
+ollama pull llama3.2
+ollama pull nomic-embed-text
+
+<span class="c"># get the code and start everything</span>
+git clone https://github.com/groundedkit/docbound.git
+cd docbound
+docker compose up --build
+
+<span class="c"># then open http://localhost:3000</span></pre>
+      </div>
+    </section>
+
+    <section id="pricing">
+      <div class="wrap">
+        <h2>Free, with a Pro edition coming</h2>
+        <p class="section-lead">The free version is a complete app for one person on their own machine. Pro will add what a team needs to put it in front of real users.</p>
+        <div class="plans">
+          <div class="plan">
+            <h3>Docbound <span class="tag">Apache 2.0</span></h3>
+            <p class="price">Free and open source</p>
+            <ul>
+              <li>Upload PDF, Word, Markdown, text and HTML</li>
+              <li>Streaming answers with citations</li>
+              <li>Source panel showing the exact passage</li>
+              <li>"Not found" instead of guessing</li>
+              <li>Retrieval evaluation harness</li>
+              <li>Tests, CI and one-command Docker setup</li>
+            </ul>
+            <a class="button secondary" href="https://github.com/groundedkit/docbound">Get it on GitHub</a>
+          </div>
+          <div class="plan pro">
+            <h3>Docbound Pro <span class="tag">Planned</span></h3>
+            <p class="price">Everything in the free version, plus:</p>
+            <ul>
+              <li>Login and per-user documents</li>
+              <li>OpenAI and Anthropic models</li>
+              <li>Chat history and follow-up questions</li>
+              <li>Usage and cost tracking</li>
+              <li>Hybrid search and evaluation on your own documents</li>
+              <li>Production deploy guides</li>
+            </ul>
+            <a class="button primary" id="notify" href="https://github.com/groundedkit/docbound">Get notified about Pro</a>
+            <p class="fine" id="notify-note">Watch the repository on GitHub to hear when Pro is released.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>groundedkit: grounded, production-ready starter kits for Java developers.</span>
+      <span><a href="https://github.com/groundedkit">GitHub</a> · Docbound is licensed under Apache 2.0</span>
+    </div>
+  </footer>
+
+  <script>
+    // Set this to the signup form's URL (e.g. a Tally form) once it exists. Until then, the button points to the
+    // GitHub repository, where people can watch for releases.
+    const NOTIFY_FORM_URL = ''
+    if (NOTIFY_FORM_URL) {
+      document.getElementById('notify').href = NOTIFY_FORM_URL
+      document.getElementById('notify-note').textContent = 'One email when Pro launches. No spam.'
+    }
+  </script>
+</body>
+</html>
