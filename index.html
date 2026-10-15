@@ -7,20 +7,32 @@
   <meta name="description" content="Docbound is a production-ready RAG starter for Spring Boot: cited answers, measured retrieval, and it runs locally with Ollama. Free and open source.">
   <meta property="og:title" content="Docbound: a RAG starter for Spring Boot">
   <meta property="og:description" content="Chat with your documents in Java. Cited answers, measured retrieval, runs locally with Ollama. Free and open source.">
-  <meta property="og:image" content="https://groundedkit.github.io/docbound-demo.gif">
+  <meta property="og:image" content="https://groundedkit.github.io/brand/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:type" content="website">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#17171b">
+  <link rel="icon" href="brand/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="brand/favicon-16.png" sizes="16x16" type="image/png">
+  <link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #fafaf8;
       --surface: #ffffff;
       --surface-muted: #f1f1ee;
       --border: #e3e3de;
-      --text: #1c1c1a;
-      --text-muted: #62625d;
-      --accent: #2f5bd3;
-      --accent-soft: #e8edfb;
+      --text: #17171b;
+      --text-muted: #5f5f5a;
+      /* Brand: ink and amber. --accent fills buttons; --link and --mark carry the amber. */
+      --accent: #17171b;
+      --accent-soft: #fdf0d9;
       --accent-text: #ffffff;
+      --link: #935400;
+      --mark: #f5a524;
       --code-bg: #16181d;
       --code-text: #e6e6e3;
       --radius: 12px;
@@ -35,9 +47,10 @@
         --border: #30302d;
         --text: #ececea;
         --text-muted: #a3a39d;
-        --accent: #7d9ef2;
-        --accent-soft: #222d47;
-        --accent-text: #0e1320;
+        --accent: #f5a524;
+        --accent-soft: #3a2b12;
+        --accent-text: #17171b;
+        --link: #f5b84d;
         --code-bg: #0b0c0f;
         color-scheme: dark;
       }
@@ -47,27 +60,28 @@
       margin: 0;
       background: var(--bg);
       color: var(--text);
-      font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font: 16px/1.6 Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       -webkit-font-smoothing: antialiased;
     }
-    a { color: var(--accent); }
+    a { color: var(--link); }
     .wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
     header.site {
       display: flex; align-items: center; justify-content: space-between;
       padding-block: 18px;
     }
-    .brand { font-weight: 700; font-size: 1.05rem; color: var(--text); text-decoration: none; letter-spacing: -0.01em; }
-    .brand span { color: var(--accent); }
+    .brand { font-weight: 800; font-size: 1.25rem; color: var(--text); text-decoration: none; letter-spacing: -0.045em; }
+    /* The brand's signature: an amber superscript 1, like a citation. */
+    .brand sup, .wordmark sup { color: var(--mark); font-size: 0.5em; margin-left: 0.06em; letter-spacing: 0; }
     nav a { color: var(--text-muted); text-decoration: none; margin-left: 20px; font-size: 0.95rem; }
     nav a:hover { color: var(--text); }
 
     .hero { padding-block: 56px 32px; text-align: center; }
     .eyebrow {
       display: inline-block; padding: 4px 12px; border-radius: 999px;
-      background: var(--accent-soft); color: var(--accent);
+      background: var(--accent-soft); color: var(--link);
       font-size: 0.85rem; font-weight: 600;
     }
-    h1 { font-size: clamp(2rem, 5vw, 3.1rem); line-height: 1.12; letter-spacing: -0.025em; margin: 18px auto 14px; max-width: 18ch; }
+    h1 { font-size: clamp(2rem, 5vw, 3.1rem); line-height: 1.12; letter-spacing: -0.035em; margin: 18px auto 14px; max-width: 18ch; }
     .lead { font-size: 1.15rem; color: var(--text-muted); max-width: 40rem; margin: 0 auto 28px; }
     .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
     .button {
@@ -115,11 +129,11 @@
     .plan.pro { border-color: var(--accent); }
     .plan h3 { margin: 0; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
     .plan .tag { font-size: 0.75rem; font-weight: 600; padding: 2px 9px; border-radius: 999px; background: var(--surface-muted); color: var(--text-muted); }
-    .plan.pro .tag { background: var(--accent-soft); color: var(--accent); }
+    .plan.pro .tag { background: var(--accent-soft); color: var(--link); }
     .plan .price { color: var(--text-muted); margin: 6px 0 16px; }
     .plan ul { list-style: none; padding: 0; margin: 0 0 22px; }
     .plan li { padding: 6px 0 6px 26px; position: relative; }
-    .plan li::before { content: "✓"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+    .plan li::before { content: "✓"; position: absolute; left: 0; color: var(--mark); font-weight: 700; }
     .plan .button { width: 100%; justify-content: center; }
     .fine { color: var(--text-muted); font-size: 0.88rem; margin: 10px 0 0; text-align: center; }
 
@@ -137,7 +151,7 @@
 </head>
 <body>
   <header class="wrap site">
-    <a class="brand" href="./">grounded<span>kit</span></a>
+    <a class="brand" href="./" aria-label="groundedkit home">groundedkit<sup>1</sup></a>
     <nav>
       <a class="optional" href="#features">Features</a>
       <a class="optional" href="#start">Quick start</a>
@@ -257,7 +271,7 @@ docker compose up --build
 
   <footer>
     <div class="wrap">
-      <span>groundedkit: grounded, production-ready starter kits for Java developers.</span>
+      <span><span class="wordmark" style="font-weight:800;letter-spacing:-0.045em;color:var(--text)">groundedkit<sup>1</sup></span> · grounded, production-ready starter kits for Java developers.</span>
       <span><a href="https://github.com/groundedkit">GitHub</a> · Docbound is licensed under Apache 2.0</span>
     </div>
   </footer>
