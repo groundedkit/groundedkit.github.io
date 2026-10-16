@@ -126,30 +126,14 @@
 
     .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
     .plan { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 26px; }
-    .plan.pro { border-color: var(--accent); }
     .plan h3 { margin: 0; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
     .plan .tag { font-size: 0.75rem; font-weight: 600; padding: 2px 9px; border-radius: 999px; background: var(--surface-muted); color: var(--text-muted); }
-    .plan.pro .tag { background: var(--accent-soft); color: var(--link); }
     .plan .price { color: var(--text-muted); margin: 6px 0 16px; }
     .plan ul { list-style: none; padding: 0; margin: 0 0 22px; }
     .plan li { padding: 6px 0 6px 26px; position: relative; }
     .plan li::before { content: "✓"; position: absolute; left: 0; color: var(--mark); font-weight: 700; }
     .plan .button { width: 100%; justify-content: center; }
-    .fine { color: var(--text-muted); font-size: 0.88rem; margin: 10px 0 0; text-align: center; }
-    .notify { display: grid; gap: 8px; }
-    .notify label { font-weight: 600; font-size: 0.95rem; }
-    .notify .optional-label { margin-top: 6px; }
-    .notify .optional-label span { color: var(--text-muted); font-weight: 400; font-size: 0.85rem; margin-left: 4px; }
-    .notify input, .notify textarea {
-      font: inherit; width: 100%; padding: 10px 12px; border-radius: 10px;
-      border: 1px solid var(--border); background: var(--bg); color: var(--text);
-    }
-    .notify textarea { resize: vertical; min-height: 64px; }
-    .notify input:focus-visible, .notify textarea:focus-visible { outline: 2px solid var(--mark); outline-offset: 1px; border-color: transparent; }
-    .notify .button { margin-top: 8px; border: 0; cursor: pointer; font: inherit; font-weight: 600; }
-    .notify .button:disabled { opacity: 0.6; cursor: default; }
-    .notify.done label, .notify.done input, .notify.done textarea, .notify.done .button { display: none; }
-    .notify.done .fine { font-size: 1rem; color: var(--text); text-align: left; margin: 0; }
+    .plan.ask li::before { content: "→"; }
 
     footer { border-top: 1px solid var(--border); padding-block: 28px 40px; color: var(--text-muted); font-size: 0.9rem; }
     footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
@@ -169,7 +153,7 @@
     <nav>
       <a class="optional" href="#features">Features</a>
       <a class="optional" href="#start">Quick start</a>
-      <a href="#pricing">Free &amp; Pro</a>
+      <a href="#open-source">Open source</a>
       <a href="https://github.com/groundedkit">GitHub</a>
     </nav>
   </header>
@@ -245,14 +229,14 @@ docker compose up --build
       </div>
     </section>
 
-    <section id="pricing">
+    <section id="open-source">
       <div class="wrap">
-        <h2>Free, with a Pro edition coming</h2>
-        <p class="section-lead">The free version is a complete app for one person on their own machine. Pro will add what a team needs to put it in front of real users.</p>
+        <h2>Free and open source</h2>
+        <p class="section-lead">Docbound is the whole app, not a teaser: every feature on this page is in the repository, under the Apache 2.0 license.</p>
         <div class="plans">
           <div class="plan">
             <h3>Docbound <span class="tag">Apache 2.0</span></h3>
-            <p class="price">Free and open source</p>
+            <p class="price">Clone it, change it, ship it</p>
             <ul>
               <li>Upload PDF, Word, Markdown, text and HTML</li>
               <li>Streaming answers with citations</li>
@@ -264,28 +248,15 @@ docker compose up --build
             </ul>
             <a class="button secondary" href="https://github.com/groundedkit/docbound">Get it on GitHub</a>
           </div>
-          <div class="plan pro" id="pro">
-            <h3>Docbound Pro <span class="tag">Planned</span></h3>
-            <p class="price">Everything in the free version, plus:</p>
+          <div class="plan ask">
+            <h3>Help shape it</h3>
+            <p class="price">What should come next is up to the people using it.</p>
             <ul>
-              <li>Login and per-user documents</li>
-              <li>OpenAI and Anthropic models</li>
-              <li>Saved chat history across sessions</li>
-              <li>Usage and cost tracking</li>
-              <li>Hybrid search and evaluation on your own documents</li>
-              <li>Production deploy guides</li>
+              <li>Found a bug or a wrong answer? Open an issue with the question and document type.</li>
+              <li>Missing something, like another model provider or login? Ask for it in an issue.</li>
+              <li>Find it useful? A star helps other Java developers find it.</li>
             </ul>
-            <!-- Posts to the "Docbound Pro: get notified" Google Form; responses land in the owner's Google Sheet. -->
-            <form class="notify" id="notify-form" method="post" target="_blank"
-                  action="https://docs.google.com/forms/d/e/1FAIpQLSeVm1fBHo6Z5jaQpAwLZw0JtUXnvQtO8ubitCncEWIlKMwTzw/formResponse">
-              <label for="notify-email">Get one email when Pro launches</label>
-              <input id="notify-email" name="emailAddress" type="email" required autocomplete="email" placeholder="you@company.com">
-              <label for="notify-use" class="optional-label">What would you use Pro for? <span>Optional</span></label>
-              <textarea id="notify-use" name="entry.1789204203" rows="2" maxlength="1000"
-                        placeholder="An internal docs assistant for our support team"></textarea>
-              <button class="button primary" type="submit">Get notified</button>
-              <p class="fine" id="notify-status" role="status">One email at launch, with an early-bird price. Never shared; reply to that email to be removed.</p>
-            </form>
+            <a class="button primary" href="https://github.com/groundedkit/docbound/issues/new">Open an issue</a>
           </div>
         </div>
       </div>
@@ -299,27 +270,5 @@ docker compose up --build
     </div>
   </footer>
 
-  <script>
-    // Submit the Pro signup in place. Google Forms doesn't send CORS headers, so the response is opaque:
-    // a network error means it failed, anything else is treated as success. Without JavaScript the form
-    // posts normally and Google shows its own confirmation page.
-    const form = document.getElementById('notify-form')
-    const status = document.getElementById('notify-status')
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault()
-      const button = form.querySelector('button')
-      button.disabled = true
-      button.textContent = 'Sending…'
-      try {
-        await fetch(form.action, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(new FormData(form)) })
-        form.classList.add('done')
-        status.textContent = "You're on the list. We'll email you once, when Docbound Pro launches."
-      } catch {
-        button.disabled = false
-        button.textContent = 'Get notified'
-        status.textContent = "That didn't go through. Check your connection and try again."
-      }
-    })
-  </script>
 </body>
 </html>
